@@ -25,8 +25,6 @@ while True:
 
     image = cv2.flip(image, 1)
 
-    image.flags.writeable = True
-
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
     results = hands.process(image_rgb)
@@ -69,6 +67,7 @@ while True:
         break
     elif key == ord('c'):
         canvas = None
+        lines = []
         prev_x, prev_y = None, None
 
 cap.release()
