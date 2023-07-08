@@ -48,16 +48,17 @@ def clear_all():
     rectangle.clear()
 
 def Undo():
-    print(index)
     if active[-1] == 0:
         for i in range(index[-2], index[-1]+1):
             st.session_state.backup[0].pop(i) 
-    elif active[-1] == 1:
+    elif active[-1] == 1 and st.session_state.backup[1] != []:
         st.session_state.backup[1].pop()
-    elif active[-1] == 2:
+    elif active[-1] == 2 and st.session_state.backup[2] != []:
         st.session_state.backup[2].pop()
-    elif active[-1] == 3:
+    elif active[-1] == 3 and st.session_state.backup[3] != []:
         st.session_state.backup[3].pop()
+        
+    st.session_state.backup[4].pop()
 
 
 # Sidebar contents
