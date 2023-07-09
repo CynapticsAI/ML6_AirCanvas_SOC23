@@ -22,11 +22,6 @@ rectangle = []
 active = []
 index = [0]
 
-# if 'key' not in st.session_state:
-#     st.session_state.key = None
-# else:
-#     active = st.session_state.key
-
 if 'backup' not in st.session_state:
     st.session_state.backup = []
 else:
