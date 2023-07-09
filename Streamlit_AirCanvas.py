@@ -48,17 +48,22 @@ def clear_all():
     rectangle.clear()
 
 def Undo():
-    if active[-1] == 0:
-        for i in range(index[-2], index[-1]+1):
-            st.session_state.backup[0].pop(i) 
+   l = len(st.session_state.backup[0])
+    if active[-1] == 0 and len(index) > 1:
+        for i in range(l-index[-2]):
+            st.session_state.backup[0].pop(index[-2]) 
+            
     elif active[-1] == 1 and st.session_state.backup[1] != []:
         st.session_state.backup[1].pop()
     elif active[-1] == 2 and st.session_state.backup[2] != []:
         st.session_state.backup[2].pop()
     elif active[-1] == 3 and st.session_state.backup[3] != []:
         st.session_state.backup[3].pop()
-        
-    st.session_state.backup[4].pop()
+    
+    if st.session_state.backup[4] != []:
+        st.session_state.backup[4].pop()
+    if st.session_state.backup[5] != [0]:
+        st.session_state.backup[5].pop()
 
 
 # Sidebar contents
@@ -114,11 +119,11 @@ while run:
                 if tool == tools[0]: 
                     if draw:
                         freehand.append(((prev_x, prev_y), (x_index, y_index), brush_color, 2*thickness, 4))
-                        active.append(0)
                         i = len(freehand) - 1
                     else:
                         if i > index[-1]:
                             index.append(i)
+                            active.append(0
 
                 elif tool == tools[1]:
                     cv2.circle(image, (x_thumb, y_thumb), 2*thickness, brush_color, -1, lineType=4)
