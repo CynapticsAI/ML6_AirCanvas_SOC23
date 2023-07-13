@@ -276,27 +276,5 @@ while run:
     key = cv2.waitKey(1) & 0xFF
     if key == ord('q'):
         break
-
-    # def Capture():
-    #     cv2.imwrite('canvas_image.jpg', canvas)
-    #     st.success('Canvas image captured!')
-    #     st.image(canvas)
-
-    #     with open("canvas_image.jpg", "rb") as image:
-    #         st.download_button(label = "Download image", file_name="canvas.jpg", data= image)
-
-    #     if auth_status:
-    #         with open('C:/Users/userp/Downloads/users.yml', 'r+') as file:
-    #             data = yaml.load(file, Loader=SafeLoader)
-    #         if 'canvas' in data['usernames'][username]:
-    #             canvas_count = len(data['usernames'][username]['canvas'])
-    #         else:
-    #             canvas_count = 0
-        
-    #         st.write('Please enter a name for your canvas')
-    #         canvas_name = st.text_input('canvas_name')
-    #         cv2.imwrite(f'canvas{canvas_count}.jpg', 'rb')
-
-    
     
     st.session_state.backup = [freehand , line, circle, rectangle, active, index]
