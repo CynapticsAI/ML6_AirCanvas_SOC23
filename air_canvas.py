@@ -101,8 +101,10 @@ while run:
             thumb_landmark = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
             x_thumb, y_thumb = int(thumb_landmark.x * image.shape[1]), int(thumb_landmark.y * image.shape[0])
             
-            if dist(x_index, y_index, x_thumb, y_thumb)>35:
-                draw = True
+            if tool==tools[0]:
+                draw=dist(x_index, y_index, x_thumb, y_thumb)<60
+            else:
+                draw=dist(x_index, y_index, x_thumb, y_thumb)>60
                 
             if prev_x is not None and prev_y is not None:
                 cv2.circle(image, (x_index, y_index), 2*thickness, brush_color, -1, lineType=4)
