@@ -28,12 +28,6 @@ def dist(x1, y1, x2, y2):
     d = math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
     return int(d)
 
-def clear_all():
-    freehand.clear()
-    line.clear()
-    circle.clear()
-    rectangle.clear()
-
 def Undo():
     if active != []:
         if active[-1] == 0 and len(index) > 1:
@@ -60,7 +54,6 @@ with st.sidebar:
     brush_color = ImageColor.getrgb(st.color_picker(label='BRUSH COLOR'))
     thickness = st.slider(label='BRUSH THICKNESS', min_value=1, max_value=10, value=3)
     canvas_color = ImageColor.getrgb(st.color_picker(label='CANVAS COLOR', value='#FFFFFF'))
-    clear = st.button('CLEAR', on_click=clear_all)
     undo = st.button('UNDO', on_click=Undo)
     capture_canvas = st.button('CAPTURE CANVAS')
 
@@ -98,12 +91,10 @@ while run:
 
             index_finger_landmark = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
             x_index, y_index = int(index_finger_landmark.x * image.shape[1]), int(index_finger_landmark.y * image.shape[0])
-            z_index = int(index_finger_landmark.z*1000)
-
+            
             thumb_landmark = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
             x_thumb, y_thumb = int(thumb_landmark.x * image.shape[1]), int(thumb_landmark.y * image.shape[0])
-            z_thumb = int(thumb_landmark.z*1000)
-
+            
             image = cv2.rectangle(image, (40,1), (140,65), (0,0,0), 2)
             cv2.putText(image, "CLEAR", (49, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
 
