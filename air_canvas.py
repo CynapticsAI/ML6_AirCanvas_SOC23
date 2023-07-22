@@ -4,6 +4,7 @@ import mediapipe as mp
 import numpy as np
 import math
 from PIL import ImageColor
+from 
 
 st.set_page_config('Air-Canvas')
 st.title('Air-Canvas')
@@ -97,9 +98,11 @@ while run:
 
             index_finger_landmark = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
             x_index, y_index = int(index_finger_landmark.x * image.shape[1]), int(index_finger_landmark.y * image.shape[0])
+            z_index = int(index_finger_landmark.z*1000)
 
             thumb_landmark = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
             x_thumb, y_thumb = int(thumb_landmark.x * image.shape[1]), int(thumb_landmark.y * image.shape[0])
+            z_thumb = int(thumb_landmark.z*1000)
 
             image = cv2.rectangle(image, (40,1), (140,65), (0,0,0), 2)
             cv2.putText(image, "CLEAR", (49, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
