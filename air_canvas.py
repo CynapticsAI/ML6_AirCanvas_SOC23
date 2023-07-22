@@ -100,6 +100,9 @@ while run:
 
             thumb_landmark = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
             x_thumb, y_thumb = int(thumb_landmark.x * image.shape[1]), int(thumb_landmark.y * image.shape[0])
+
+            image = cv2.rectangle(image, (40,1), (140,65), (0,0,0), 2)
+            cv2.putText(image, "CLEAR", (49, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
             
             if tool==tools[0]:
                 draw=dist(x_index, y_index, x_thumb, y_thumb)<60
