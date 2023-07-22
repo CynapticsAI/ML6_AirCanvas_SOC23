@@ -4,7 +4,7 @@ import mediapipe as mp
 import numpy as np
 import math
 from PIL import ImageColor
-from 
+from collections import deque
 
 st.set_page_config('Air-Canvas')
 st.title('Air-Canvas')
@@ -106,6 +106,16 @@ while run:
 
             image = cv2.rectangle(image, (40,1), (140,65), (0,0,0), 2)
             cv2.putText(image, "CLEAR", (49, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+
+            if dist(x_index, y_index, x_thumb, y_thumb)>35:
+                draw = True
+
+            if y_index <= 65:
+                if 40 <= x_index <= 140:
+                    freehand.clear()
+                    line.clear()
+                    circle.clear()
+                    rectangle.clear()
             
             if tool==tools[0]:
                 draw=dist(x_index, y_index, x_thumb, y_thumb)<60
