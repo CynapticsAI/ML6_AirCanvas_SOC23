@@ -23,7 +23,6 @@ if 'backup' not in st.session_state:
 else:
     freehand , line, circle, rectangle, active, index = st.session_state.backup
 
-
 def dist(x1, y1, x2, y2):
     d = math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
     return int(d)
@@ -98,7 +97,7 @@ while run:
             image = cv2.rectangle(image, (40,1), (140,65), (0,0,0), 2)
             cv2.putText(image, "CLEAR", (49, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
 
-            if dist(x_index, y_index, x_thumb, y_thumb)>35:
+            if dist(x_index, y_index, x_thumb, y_thumb)<10:
                 draw = True
 
             if y_index <= 65:
@@ -107,11 +106,12 @@ while run:
                     line.clear()
                     circle.clear()
                     rectangle.clear()
+                    canvas = None
             
             if tool==tools[0]:
-                draw=dist(x_index, y_index, x_thumb, y_thumb)<60
+                draw=dist(x_index, y_index, x_thumb, y_thumb)<20
             else:
-                draw=dist(x_index, y_index, x_thumb, y_thumb)>60
+                draw=dist(x_index, y_index, x_thumb, y_thumb)>20
                 
             if prev_x is not None and prev_y is not None:
                 cv2.circle(image, (x_index, y_index), 2*thickness, brush_color, -1, lineType=4)
@@ -184,8 +184,10 @@ while run:
 
    
     for point in circle:
-        cv2.circle(image, (int((point[0][0] + point[1][0])/2), int((point[0][1] + point[1][1])/2)), int((dist(point[0][0], point[0][1], point[1][0], point[1][1]))/2), point[2], point[3], lineType=point[4])
-        cv2.circle(canvas, (int((point[0][0] + point[1][0])/2), int((point[0][1] + point[1][1])/2)), int((dist(point[0][0], point[0][1], point[1][0], point[1][1]))/2), point[2], point[3], lineType=point[4])
+        cv2.circle(image, (int((point[0][0] + point[1][0]) / 2), int((point[0][1] + point[1][1]) / 2)),
+                   int((dist(point[0][0], point[0][1], point[1][0], point[1][1])) / 2), point[2], point[3], lineType=point[4])
+        cv2.circle(canvas, (int((point[0][0] + point[1][0]) / 2), int((point[0][1] + point[1][1]) / 2)),
+                   int((dist(point[0][0], point[0][1], point[1][0], point[1][1])) / 2), point[2], point[3], lineType=point[4])
 
    
     for point in rectangle:
@@ -196,19 +198,13 @@ while run:
     FRAME.image(image)
     CANVAS.image(canvas)
 
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
     if capture_canvas:
         cv2.imwrite('canvas_image.jpg', canvas)
         st.success('Canvas image captured!')
-
-        with open("canvas_image.jpg", "rb") as file:
-            st.download_button(label = "Download image", file_name="canvas.jpg", data= file)
-
+        st.image(canvas)
         break
-    
-st.session_state.backup = [freehand , line, circle, rectangle, active, index]
-
-
-
 
 
 
