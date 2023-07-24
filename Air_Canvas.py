@@ -8,6 +8,8 @@ from PIL import ImageColor
 
 st.set_page_config('Air-Canvas', layout='wide')
 st.title('Air-Canvas')
+st.sidebar.success('Select a page above.')
+st.sidebar.text("")
 
 run = st.checkbox('Run')
 
@@ -57,10 +59,14 @@ def Undo():
 
 # Sidebar contents
 with st.sidebar:
-    tool = st.selectbox(label='DRAWING TOOL', options=tools, index=0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  )
+    tool = st.selectbox(label='DRAWING TOOL', options=tools, index=0) 
+    st.text(""                                                                                                                                                                                                                                                                                                                                                                                                                                                                              )
     brush_color = ImageColor.getrgb(st.color_picker(label='BRUSH COLOR'))
+    st.text("")
     thickness = st.slider(label='BRUSH THICKNESS', min_value=1, max_value=10, value=3)
+    st.text("")
     canvas_color = ImageColor.getrgb(st.color_picker(label='CANVAS COLOR', value='#FFFFFF'))
+    st.text("")
     undo = st.button('UNDO', on_click=Undo)
     capture_canvas = st.button('CAPTURE CANVAS')
 
@@ -223,7 +229,7 @@ while run:
         cv2.imwrite('canvas_image.jpg', canvas)
         st.success('Canvas image captured!')
         st.image(canvas)
+        with open("canvas_image.jpg", "rb") as file:
+            st.download_button('Download Image', data=file, file_name='Canvas.jpg')
         break
-
-
 
