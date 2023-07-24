@@ -5,6 +5,7 @@ import numpy as np
 import math
 from PIL import ImageColor
 
+
 st.set_page_config('Air-Canvas', layout='wide')
 st.title('Air-Canvas')
 
@@ -23,11 +24,12 @@ tools = ['Freehand', 'Line', 'Circle', 'Rectangle']
 freehand, line, circle, rectangle, active, index = [], [], [], [], [], [0]
 
 
-# Session state
+# Updating session state
 if 'backup' not in st.session_state:
     st.session_state.backup = [[], [], [], [], [], [0]]
 else:
     freehand , line, circle, rectangle, active, index = st.session_state.backup
+
 
 def dist(x1, y1, x2, y2):
     d = math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
@@ -73,6 +75,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+
 captur_done = False
 
 mp_drawing = mp.solutions.drawing_utils
@@ -114,11 +117,6 @@ while run:
             thumb_landmark = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
             x_thumb, y_thumb = int(thumb_landmark.x * image.shape[1]), int(thumb_landmark.y * image.shape[0])
             
-            image = cv2.rectangle(image, (40,1), (140,65), (0,0,0), 2)
-            cv2.putText(image, "CLEAR", (49, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-
-            if dist(x_index, y_index, x_thumb, y_thumb)>35:
-                draw = True
 
             if y_index <= 65:
                 if 535 <= x_index <= 635:
@@ -127,11 +125,13 @@ while run:
                     circle.clear()
                     rectangle.clear()
             
+
             if tool==tools[0]:
                 draw=dist(x_index, y_index, x_thumb, y_thumb)<60
             else:
                 draw=dist(x_index, y_index, x_thumb, y_thumb)>60
                 
+
             if prev_x is not None and prev_y is not None:
                 cv2.circle(image, (x_index, y_index), 2*thickness, brush_color, -1, lineType=4)
                 if tool == tools[0]: 
