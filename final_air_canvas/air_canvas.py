@@ -4,18 +4,24 @@ import mediapipe as mp
 import numpy as np
 import math
 from PIL import ImageColor
-from collections import deque
 
-st.set_page_config('Air-Canvas')
+st.set_page_config('Air-Canvas', layout='wide')
 st.title('Air-Canvas')
 
 run = st.checkbox('Run')
-FRAME = st.image([])
-CANVAS = st.image([])
+
+col1, col2 = st.columns(2)
+with col1:
+    FRAME = st.image([])
+with col2:
+    CANVAS = st.image([])
+
+canvas = None
 
 tools = ['Freehand', 'Line', 'Circle', 'Rectangle']
 
 freehand, line, circle, rectangle, active, index = [], [], [], [], [], [0]
+
 
 # Session state
 if 'backup' not in st.session_state:
@@ -57,7 +63,17 @@ with st.sidebar:
     undo = st.button('UNDO', on_click=Undo)
     capture_canvas = st.button('CAPTURE CANVAS')
 
-canvas = None
+st.markdown(
+    """
+    <style>
+        section[data-testid="stSidebar"] {
+            width: 500px
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 captur_done = False
 
 mp_drawing = mp.solutions.drawing_utils
@@ -76,7 +92,7 @@ while run:
     success, image = cap.read()
     if not success:
         break
-
+    
     image = cv2.flip(image, 1)
 
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -85,7 +101,11 @@ while run:
 
     draw = False
 
+    cv2.rectangle(image, (535,2), (635,65), (0,0,0), 3)
+    cv2.putText(image, "CLEAR", (555, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2, cv2.LINE_AA)
+
     if results.multi_hand_landmarks:
+
         for hand_landmarks in results.multi_hand_landmarks:
             mp_drawing.draw_landmarks(image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
@@ -95,23 +115,21 @@ while run:
             thumb_landmark = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
             x_thumb, y_thumb = int(thumb_landmark.x * image.shape[1]), int(thumb_landmark.y * image.shape[0])
             
-            image = cv2.rectangle(image, (40,1), (140,65), (0,0,0), 2)
-            cv2.putText(image, "CLEAR", (49, 33), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-
-            if dist(x_index, y_index, x_thumb, y_thumb)>35:
-                draw = True
 
             if y_index <= 65:
-                if 40 <= x_index <= 140:
+                if 535 <= x_index <= 635:
                     freehand.clear()
                     line.clear()
                     circle.clear()
                     rectangle.clear()
+                    canvas = None
+
             
             if tool==tools[0]:
-                draw=dist(x_index, y_index, x_thumb, y_thumb)<60
+                draw=dist(x_index, y_index, x_thumb, y_thumb)<50
             else:
-                draw=dist(x_index, y_index, x_thumb, y_thumb)>60
+                draw=dist(x_index, y_index, x_thumb, y_thumb)>50
+
                 
             if prev_x is not None and prev_y is not None:
                 cv2.circle(image, (x_index, y_index), 2*thickness, brush_color, -1, lineType=4)
@@ -172,22 +190,21 @@ while run:
         canvas[:, :, 0] = canvas_color[0]  
         canvas[:, :, 1] = canvas_color[1]
         canvas[:, :, 2] = canvas_color[2]
+        canvas = cv2.copyMakeBorder(canvas, 5, 5, 5, 5, borderType=cv2.BORDER_CONSTANT, value=[0, 0, 0])
+
 
     for point in freehand:
         cv2.line(image, point[0], point[1], point[2], point[3], lineType=point[4])
         cv2.line(canvas, point[0], point[1], point[2], point[3], lineType=point[4])
 
-   
     for point in line:
         cv2.line(image, point[0], point[1], point[2], point[3], lineType=point[4])
         cv2.line(canvas, point[0], point[1], point[2], point[3], lineType=point[4])
 
-   
     for point in circle:
         cv2.circle(image, (int((point[0][0] + point[1][0])/2), int((point[0][1] + point[1][1])/2)), int((dist(point[0][0], point[0][1], point[1][0], point[1][1]))/2), point[2], point[3], lineType=point[4])
         cv2.circle(canvas, (int((point[0][0] + point[1][0])/2), int((point[0][1] + point[1][1])/2)), int((dist(point[0][0], point[0][1], point[1][0], point[1][1]))/2), point[2], point[3], lineType=point[4])
 
-   
     for point in rectangle:
         cv2.rectangle(image, point[0], point[1], point[2], point[3], lineType=point[4])
         cv2.rectangle(canvas, point[0], point[1], point[2], point[3], lineType=point[4])
