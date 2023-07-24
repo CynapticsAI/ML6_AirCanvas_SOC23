@@ -71,6 +71,7 @@ with st.sidebar:
     capture_canvas = st.button('CAPTURE CANVAS')
 
 st.markdown(
+    
     """
     <style>
         section[data-testid="stSidebar"] {
