@@ -124,6 +124,7 @@ while run:
                     line.clear()
                     circle.clear()
                     rectangle.clear()
+                    canvas = None
             
 
             if tool==tools[0]:
