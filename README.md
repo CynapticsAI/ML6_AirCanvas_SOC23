@@ -13,6 +13,11 @@ Air-Canvas is an interactive drawing application that allows you to draw and cre
 - *Capture Canvas Image*: Save your artwork by capturing the current state of the canvas as an image.
 - *User-Friendly Interface*: The intuitive interface makes drawing and interacting with the application a breeze.
 
+![Clear](pages/clear.png)
+![Drawing Tool](pages/drawing_tool.png)
+![Draw](pages/draw.png)
+![Shapes](pages/shapes.png)
+
 ## How to Use
 
 1. Make sure your webcam is connected and functioning correctly.
