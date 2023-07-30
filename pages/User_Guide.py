@@ -15,7 +15,7 @@ image = Image.open('pages/run.png')
 st.image(image,  channels="BGR" )
 st.text("")
 
-st.subheader("Use your index finger to draw , join index finger and thumb to stop drawing from the pen.")
+st.subheader("Join index finger and thumb to start drawing from the pen.")
 draw = Image.open('pages/draw.png')
 st.image(draw,  channels="BGR" )
 st.text("")
